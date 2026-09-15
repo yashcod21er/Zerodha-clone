@@ -1,0 +1,273 @@
+.kite-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kite-buy-window {
+    width: 440px;
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: kiteModalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@keyframes kiteModalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.buy-window-header {
+    background: #4184f3;
+    padding: 16px 20px 10px 20px;
+    color: #ffffff;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.stock-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-tag {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stock-name {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.exchange-tag {
+    font-size: 10px;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.8;
+    padding: 4px;
+    transition: opacity 0.15s;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+.order-tabs {
+    display: flex;
+    gap: 20px;
+}
+
+.order-tab {
+    font-size: 13px;
+    cursor: pointer;
+    padding-bottom: 6px;
+    opacity: 0.75;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.order-tab.active {
+    opacity: 1;
+    font-weight: 600;
+}
+
+.order-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #ffffff;
+    border-radius: 2px 2px 0 0;
+}
+
+.buy-window-body {
+    padding: 22px 20px;
+}
+
+.product-type-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.radio-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.radio-pill input[type="radio"] {
+    accent-color: #4184f3;
+    cursor: pointer;
+}
+
+.radio-pill.selected {
+    color: #222;
+}
+
+.order-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.kite-fieldset {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 2px 10px 6px 10px;
+    margin: 0;
+    transition: border-color 0.2s;
+}
+
+.kite-fieldset:focus-within {
+    border-color: #4184f3;
+}
+
+.kite-fieldset.disabled {
+    background: #f9f9f9;
+    border-color: #eee;
+    color: #aaa;
+}
+
+.kite-fieldset legend {
+    font-size: 11px;
+    color: #888;
+    padding: 0 4px;
+    font-weight: 500;
+}
+
+.kite-fieldset input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    padding: 4px 0;
+    font-family: inherit;
+    background: transparent;
+}
+
+.price-type-row {
+    display: flex;
+    gap: 20px;
+    padding-top: 4px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #4184f3;
+    cursor: pointer;
+}
+
+.buy-window-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+
+.margin-indicator {
+    font-size: 12px;
+    color: #666;
+}
+
+.margin-indicator strong {
+    color: #333;
+}
+
+.footer-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.kite-submit-btn {
+    border: none;
+    padding: 9px 24px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.kite-submit-btn.buy {
+    background: #4184f3;
+}
+
+.kite-submit-btn.buy:hover {
+    background: #2b70e4;
+}
+
+.kite-cancel-btn {
+    background: #ffffff;
+    border: 1px solid #dcdcdc;
+    padding: 9px 18px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666666;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+
+.kite-cancel-btn:hover {
+    background: #f0f0f0;
+    color: #333333;
+}
