@@ -21,13 +21,24 @@ function Navbar() {
     return "http://localhost:3000";
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    if (typeof document !== "undefined") {
+      const collapseElem = document.getElementById("zerodhaNavigation");
+      if (collapseElem && collapseElem.classList.contains("show")) {
+        collapseElem.classList.remove("show");
+      }
+    }
+  };
+
   const handleOpenKite = (e) => {
     e.preventDefault();
+    closeMenu();
     const targetUrl = getKiteUrl();
     window.location.href = targetUrl;
   };
 
-  // Close menu when clicking outside
+  // Close menu when clicking or tapping outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -35,13 +46,17 @@ function Navbar() {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   return (
     <nav className="navbar navbar-expand-lg zerodha-navbar sticky-top" ref={menuRef}>
       <div className="container" style={{ position: "relative" }}>
-        <Link className="navbar-brand" to="/" aria-label="Zerodha home">
+        <Link className="navbar-brand" to="/" aria-label="Zerodha home" onClick={closeMenu}>
           <img src="/images/logo.svg" alt="Zerodha" className="navbar-logo" />
         </Link>
 
@@ -63,7 +78,10 @@ function Navbar() {
             {isAuthenticated ? (
               <li className="nav-item">
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    closeMenu();
+                    logout();
+                  }}
                   className="nav-link btn btn-link"
                   style={{
                     border: "none",
@@ -82,29 +100,29 @@ function Navbar() {
               </li>
             ) : (
               <li className="nav-item">
-                <Link className="nav-link" to="/signup">
+                <Link className="nav-link" to="/signup" onClick={closeMenu}>
                   Sign up
                 </Link>
               </li>
             )}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
+              <Link className="nav-link" to="/about" onClick={closeMenu}>
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
+              <Link className="nav-link" to="/products" onClick={closeMenu}>
                 Products
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/pricing">
+              <Link className="nav-link" to="/pricing" onClick={closeMenu}>
                 Pricing
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/support">
+              <Link className="nav-link" to="/support" onClick={closeMenu}>
                 Support
               </Link>
             </li>
@@ -154,6 +172,27 @@ function Navbar() {
               animation: "fadeIn 0.2s ease",
             }}
           >
+            {/* Mobile Close Button */}
+            <button
+              type="button"
+              onClick={closeMenu}
+              aria-label="Close menu"
+              style={{
+                position: "absolute",
+                top: "10px",
+                right: "12px",
+                border: "none",
+                background: "none",
+                fontSize: "1.3rem",
+                color: "#888",
+                cursor: "pointer",
+                padding: "4px 8px",
+                lineHeight: 1,
+              }}
+            >
+              &times;
+            </button>
+
             {/* Row 1: Primary Ecosystem Products (Official Zerodha Logos + Name ONLY) */}
             <div className="row text-center g-3 mb-4">
               {/* Kite Platform */}
@@ -191,9 +230,9 @@ function Navbar() {
 
               {/* Console */}
               <div className="col-6 col-sm-3">
-                <a
-                  href="/products"
-                  onClick={() => setIsMenuOpen(false)}
+                <Link
+                  to="/products"
+                  onClick={closeMenu}
                   style={{
                     textDecoration: "none",
                     display: "block",
@@ -218,14 +257,14 @@ function Navbar() {
                   <div style={{ fontWeight: "600", color: "#424242", fontSize: "0.95rem" }}>
                     Console
                   </div>
-                </a>
+                </Link>
               </div>
 
               {/* Kite Connect */}
               <div className="col-6 col-sm-3">
-                <a
-                  href="/products"
-                  onClick={() => setIsMenuOpen(false)}
+                <Link
+                  to="/products"
+                  onClick={closeMenu}
                   style={{
                     textDecoration: "none",
                     display: "block",
@@ -250,14 +289,14 @@ function Navbar() {
                   <div style={{ fontWeight: "600", color: "#424242", fontSize: "0.95rem" }}>
                     Kite Connect
                   </div>
-                </a>
+                </Link>
               </div>
 
               {/* Coin */}
               <div className="col-6 col-sm-3">
-                <a
-                  href="/products"
-                  onClick={() => setIsMenuOpen(false)}
+                <Link
+                  to="/products"
+                  onClick={closeMenu}
                   style={{
                     textDecoration: "none",
                     display: "block",
@@ -282,7 +321,7 @@ function Navbar() {
                   <div style={{ fontWeight: "600", color: "#424242", fontSize: "0.95rem" }}>
                     Coin
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -297,9 +336,9 @@ function Navbar() {
                   Utilities
                 </div>
                 <div className="d-flex flex-column gap-1">
-                  <a href="/pricing" style={{ color: "#666", textDecoration: "none" }}>Brokerage calculator</a>
-                  <a href="/pricing" style={{ color: "#666", textDecoration: "none" }}>Margin calculator</a>
-                  <a href="/pricing" style={{ color: "#666", textDecoration: "none" }}>SIP calculator</a>
+                  <Link to="/pricing" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>Brokerage calculator</Link>
+                  <Link to="/pricing" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>Margin calculator</Link>
+                  <Link to="/pricing" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>SIP calculator</Link>
                 </div>
               </div>
 
@@ -309,9 +348,9 @@ function Navbar() {
                   Updates
                 </div>
                 <div className="d-flex flex-column gap-1">
-                  <a href="/about" style={{ color: "#666", textDecoration: "none" }}>Z-Connect blog</a>
-                  <a href="/support" style={{ color: "#666", textDecoration: "none" }}>Circulars / Bulletin</a>
-                  <a href="/products" style={{ color: "#666", textDecoration: "none" }}>IPOs &amp; Markets</a>
+                  <Link to="/about" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>Z-Connect blog</Link>
+                  <Link to="/support" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>Circulars / Bulletin</Link>
+                  <Link to="/products" onClick={closeMenu} style={{ color: "#666", textDecoration: "none" }}>IPOs &amp; Markets</Link>
                 </div>
               </div>
 
@@ -321,8 +360,9 @@ function Navbar() {
                   Education
                 </div>
                 <div className="d-flex flex-column gap-2 mt-1">
-                  <a
-                    href="/support"
+                  <Link
+                    to="/support"
+                    onClick={closeMenu}
                     style={{
                       color: "#424242",
                       textDecoration: "none",
@@ -334,9 +374,10 @@ function Navbar() {
                   >
                     <img src="/images/products/varsity.png" alt="Varsity" style={{ width: "26px", height: "26px", objectFit: "contain" }} />
                     <span>Varsity</span>
-                  </a>
-                  <a
-                    href="/support"
+                  </Link>
+                  <Link
+                    to="/support"
+                    onClick={closeMenu}
                     style={{
                       color: "#424242",
                       textDecoration: "none",
@@ -348,7 +389,7 @@ function Navbar() {
                   >
                     <img src="/images/products/tqna.png" alt="Trading Q&A" style={{ width: "26px", height: "26px", objectFit: "contain" }} />
                     <span>Trading Q&amp;A</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

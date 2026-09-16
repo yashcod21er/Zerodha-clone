@@ -19,7 +19,7 @@ const Menu = ({ onLogout }) => {
         }
     }, []);
 
-    // Close dropdown on outside click
+    // Close dropdown on outside click or tap
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,7 +27,11 @@ const Menu = ({ onLogout }) => {
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        document.addEventListener("touchstart", handleClickOutside, { passive: true });
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
+        };
     }, []);
 
     const navItems = [
@@ -139,6 +143,7 @@ const Menu = ({ onLogout }) => {
                                 <button
                                     type="button"
                                     onClick={() => {
+                                        setIsProfileDropdownOpen(false);
                                         if (process.env.REACT_APP_ZERODHA_URL) {
                                             window.location.href = process.env.REACT_APP_ZERODHA_URL;
                                             return;
@@ -167,6 +172,7 @@ const Menu = ({ onLogout }) => {
                                 <button
                                     type="button"
                                     onClick={() => {
+                                        setIsProfileDropdownOpen(false);
                                         if (process.env.REACT_APP_ZERODHA_URL) {
                                             window.location.href = `${process.env.REACT_APP_ZERODHA_URL}/support`;
                                             return;
