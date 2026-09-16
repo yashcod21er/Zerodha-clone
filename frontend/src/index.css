@@ -306,3 +306,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Authentication Section Styles */
+.auth-section {
+  min-height: calc(100vh - 160px);
+  background: #fbfbfb;
+  display: flex;
+  align-items: center;
+}
+
+.auth-section .form-control {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-section .form-control:focus {
+  border-color: #387ed1;
+  box-shadow: 0 0 0 3px rgba(56, 126, 209, 0.12);
+}

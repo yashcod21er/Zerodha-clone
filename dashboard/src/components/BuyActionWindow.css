@@ -246,12 +246,39 @@
     font-family: inherit;
 }
 
+.buy-window-header.sell {
+    background: #ff5722;
+}
+
 .kite-submit-btn.buy {
     background: #4184f3;
 }
 
 .kite-submit-btn.buy:hover {
     background: #2b70e4;
+}
+
+.kite-submit-btn.sell {
+    background: #ff5722;
+}
+
+.kite-submit-btn.sell:hover {
+    background: #e64a19;
+}
+
+.order-error-banner {
+    background: #fff0f0;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .kite-cancel-btn {

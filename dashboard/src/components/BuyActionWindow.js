@@ -3,28 +3,52 @@ import axios from "axios";
 import GeneralContext from "./GeneralContext";
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const BuyActionWindow = ({ uid, mode = "BUY", defaultPrice = null }) => {
     const [stockQuantity, setStockQuantity] = useState(1);
-    const [stockPrice, setStockPrice] = useState(100.0);
+    const [stockPrice, setStockPrice] = useState(defaultPrice ? Number(defaultPrice) : 100.0);
     const [orderType, setOrderType] = useState("MIS"); // MIS or CNC
     const [priceType, setPriceType] = useState("MARKET"); // MARKET or LIMIT
     const [tab, setTab] = useState("REGULAR"); // REGULAR, COVER, AMO
+    const [errorMessage, setErrorMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    React.useEffect(() => {
+        if (defaultPrice) {
+            setStockPrice(Number(defaultPrice));
+        }
+    }, [defaultPrice]);
 
     const { closeBuyWindow } = useContext(GeneralContext);
+    const isSell = mode === "SELL";
 
     const marginRequired = (Number(stockQuantity) * Number(stockPrice) * (orderType === "MIS" ? 0.2 : 1.0)).toFixed(2);
 
-    const handleBuyClick = () => {
-        axios.post("http://localhost:3002/newOrder", {
-            name: uid,
-            qty: Number(stockQuantity),
-            price: Number(stockPrice),
-            mode: "BUY",
-        }).catch((err) => {
-            console.log("Order simulated:", err);
-        });
+    const handleOrderSubmit = async () => {
+        setErrorMessage("");
+        setLoading(true);
 
-        closeBuyWindow();
+        try {
+            const res = await axios.post("http://localhost:3002/newOrder", {
+                name: uid,
+                qty: Number(stockQuantity),
+                price: Number(stockPrice),
+                mode: isSell ? "SELL" : "BUY",
+                product: orderType,
+                orderType: priceType,
+            });
+
+            alert(res.data.message || `${isSell ? "Sell" : "Buy"} order confirmed!`);
+            closeBuyWindow();
+        } catch (err) {
+            const message =
+                err.response?.data?.message ||
+                err.message ||
+                "Failed to place order.";
+            setErrorMessage(message);
+            alert(message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCancelClick = () => {
@@ -38,10 +62,10 @@ const BuyActionWindow = ({ uid }) => {
                 id="buy-window"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="buy-window-header">
+                <div className={`buy-window-header ${isSell ? "sell" : "buy"}`}>
                     <div className="header-top">
                         <div className="stock-info">
-                            <span className="action-tag">Buy</span>
+                            <span className="action-tag">{isSell ? "Sell" : "Buy"}</span>
                             <span className="stock-name">{uid || "STOCK"}</span>
                             <span className="exchange-tag">NSE</span>
                         </div>
@@ -71,11 +95,17 @@ const BuyActionWindow = ({ uid }) => {
                 </div>
 
                 <div className="buy-window-body">
+                    {errorMessage && (
+                        <div className="order-error-banner">
+                            ⚠️ {errorMessage}
+                        </div>
+                    )}
+
                     <div className="product-type-row">
                         <label className={`radio-pill ${orderType === "MIS" ? "selected" : ""}`}>
                             <input
                                 type="radio"
-                                name="productType"
+                                name="orderType"
                                 value="MIS"
                                 checked={orderType === "MIS"}
                                 onChange={() => setOrderType("MIS")}
@@ -85,7 +115,7 @@ const BuyActionWindow = ({ uid }) => {
                         <label className={`radio-pill ${orderType === "CNC" ? "selected" : ""}`}>
                             <input
                                 type="radio"
-                                name="productType"
+                                name="orderType"
                                 value="CNC"
                                 checked={orderType === "CNC"}
                                 onChange={() => setOrderType("CNC")}
@@ -99,11 +129,9 @@ const BuyActionWindow = ({ uid }) => {
                             <legend>Qty.</legend>
                             <input
                                 type="number"
-                                name="qty"
-                                id="qty"
                                 min="1"
-                                onChange={(e) => setStockQuantity(Math.max(1, Number(e.target.value)))}
                                 value={stockQuantity}
+                                onChange={(e) => setStockQuantity(e.target.value)}
                             />
                         </fieldset>
 
@@ -111,18 +139,16 @@ const BuyActionWindow = ({ uid }) => {
                             <legend>Price</legend>
                             <input
                                 type="number"
-                                name="price"
-                                id="price"
                                 step="0.05"
+                                value={stockPrice}
                                 disabled={priceType === "MARKET"}
                                 onChange={(e) => setStockPrice(e.target.value)}
-                                value={stockPrice}
                             />
                         </fieldset>
 
                         <fieldset className="kite-fieldset disabled">
-                            <legend>Trigger price</legend>
-                            <input type="number" disabled value="0" />
+                            <legend>Trigger</legend>
+                            <input type="number" disabled placeholder="0.0" />
                         </fieldset>
                     </div>
 
@@ -155,8 +181,12 @@ const BuyActionWindow = ({ uid }) => {
                         <span>Margin required: <strong>₹{marginRequired}</strong></span>
                     </div>
                     <div className="footer-action-buttons">
-                        <button className="kite-submit-btn buy" onClick={handleBuyClick}>
-                            Buy
+                        <button
+                            className={`kite-submit-btn ${isSell ? "sell" : "buy"}`}
+                            onClick={handleOrderSubmit}
+                            disabled={loading}
+                        >
+                            {loading ? "Processing..." : isSell ? "Sell" : "Buy"}
                         </button>
                         <button className="kite-cancel-btn" onClick={handleCancelClick}>
                             Cancel

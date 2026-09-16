@@ -1,11 +1,30 @@
-import React from "react";
-import { positions } from "../data/data";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { positions as defaultPositions } from "../data/data";
 
 const Positions = () => {
+    const [allPositions, setAllPositions] = useState([]);
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:3002/allPositions")
+            .then((res) => {
+                if (res.data && res.data.length > 0) {
+                    setAllPositions(res.data);
+                } else {
+                    setAllPositions(defaultPositions);
+                }
+            })
+            .catch((err) => {
+                // Fallback to local data if backend is unreachable
+                setAllPositions(defaultPositions);
+            });
+    }, []);
+
     return (
         <div className="positions-page">
             <div className="page-header">
-                <h2 className="page-title">Positions ({positions.length})</h2>
+                <h2 className="page-title">Positions ({allPositions.length})</h2>
             </div>
 
             <div className="kite-table-card">
@@ -22,7 +41,7 @@ const Positions = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {positions.map((stock, index) => {
+                        {allPositions.map((stock, index) => {
                             const curValue = stock.price * stock.qty;
                             const isProfit = curValue - stock.avg * stock.qty >= 0.0;
                             const profClass = isProfit ? "profit" : "loss";
@@ -37,10 +56,10 @@ const Positions = () => {
                                         <span className="instrument-name">{stock.name}</span>
                                     </td>
                                     <td className="text-right">{stock.qty}</td>
-                                    <td className="text-right">{stock.avg.toFixed(2)}</td>
-                                    <td className="text-right">{stock.price.toFixed(2)}</td>
+                                    <td className="text-right">{Number(stock.avg || 0).toFixed(2)}</td>
+                                    <td className="text-right">{Number(stock.price || 0).toFixed(2)}</td>
                                     <td className={`text-right ${profClass}`}>
-                                        {isProfit ? "+" : ""}{(curValue - stock.avg * stock.qty).toFixed(2)}
+                                        {isProfit ? "+" : ""}{(curValue - (stock.avg || 0) * (stock.qty || 0)).toFixed(2)}
                                     </td>
                                     <td className={`text-right ${dayClass}`}>{stock.day}</td>
                                 </tr>

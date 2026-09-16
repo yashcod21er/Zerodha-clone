@@ -4,10 +4,20 @@ import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlin
 import { Link } from "react-router-dom";
 
 const Summary = () => {
+    const user = (() => {
+        try {
+            const u = sessionStorage.getItem("kite_user");
+            return u ? JSON.parse(u) : null;
+        } catch {
+            return null;
+        }
+    })();
+    const displayName = user?.fullName?.split(" ")[0] || user?.phone || "Trader";
+
     return (
         <div className="summary-page">
             <div className="summary-header">
-                <h2 className="greeting-text">Hi, User!</h2>
+                <h2 className="greeting-text">Hi, {displayName}!</h2>
                 <div className="header-divider"></div>
             </div>
 
