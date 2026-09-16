@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
+import { API_BASE_URL } from "../config/api";
 import { Tooltip, Grow } from "@mui/material";
 import {
     Search as SearchIcon,
@@ -31,7 +32,7 @@ const WatchList = () => {
         let isMounted = true;
         const fetchLiveWatchlist = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/market/watchlist");
+                const res = await axios.get(`${API_BASE_URL}/market/watchlist`);
                 if (isMounted && res.data?.success && res.data?.watchlist?.length) {
                     setStockList(res.data.watchlist);
                     setIsLiveFeed(true);
@@ -85,7 +86,7 @@ const WatchList = () => {
         setLiveSearchResult(null);
         try {
             const sym = searchTerm.trim().toUpperCase();
-            const res = await axios.get(`http://localhost:3002/market/quote/${encodeURIComponent(sym)}`);
+            const res = await axios.get(`${API_BASE_URL}/market/quote/${encodeURIComponent(sym)}`);
             if (res.data?.success && res.data?.quote) {
                 setLiveSearchResult(res.data.quote);
             } else {

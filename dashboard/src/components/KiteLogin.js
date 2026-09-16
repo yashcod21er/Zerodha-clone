@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 const KiteLogin = ({ onLoginSuccess }) => {
     const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ const KiteLogin = ({ onLoginSuccess }) => {
 
         try {
             const res = await axios.post(
-                "http://localhost:3002/auth/login",
+                `${API_BASE_URL}/auth/login`,
                 {
                     phone: formData.phone,
                     password: formData.password,
@@ -278,6 +279,10 @@ const KiteLogin = ({ onLoginSuccess }) => {
                     <button
                         type="button"
                         onClick={() => {
+                            if (process.env.REACT_APP_ZERODHA_URL) {
+                                window.location.href = `${process.env.REACT_APP_ZERODHA_URL}/signup`;
+                                return;
+                            }
                             const port = window.location.port;
                             const frontendPort = port === "3000" ? "3001" : "3000";
                             window.location.href = `http://${window.location.hostname}:${frontendPort}/signup`;

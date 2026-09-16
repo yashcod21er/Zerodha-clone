@@ -139,6 +139,10 @@ const Menu = ({ onLogout }) => {
                                 <button
                                     type="button"
                                     onClick={() => {
+                                        if (process.env.REACT_APP_ZERODHA_URL) {
+                                            window.location.href = process.env.REACT_APP_ZERODHA_URL;
+                                            return;
+                                        }
                                         const port = window.location.port;
                                         const frontendPort = port === "3000" ? "3001" : "3000";
                                         window.location.href = `http://${window.location.hostname}:${frontendPort}`;
@@ -163,6 +167,10 @@ const Menu = ({ onLogout }) => {
                                 <button
                                     type="button"
                                     onClick={() => {
+                                        if (process.env.REACT_APP_ZERODHA_URL) {
+                                            window.location.href = `${process.env.REACT_APP_ZERODHA_URL}/support`;
+                                            return;
+                                        }
                                         const port = window.location.port;
                                         const frontendPort = port === "3000" ? "3001" : "3000";
                                         window.location.href = `http://${window.location.hostname}:${frontendPort}/support`;

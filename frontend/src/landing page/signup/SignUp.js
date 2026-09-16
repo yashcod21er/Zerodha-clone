@@ -44,11 +44,6 @@ function SignUp() {
         if (error) setError("");
     };
 
-    const handleKiteRedirect = () => {
-        const port = window.location.port;
-        const targetPort = port === "3001" ? "3000" : "3001";
-        window.location.href = `http://${window.location.hostname}:${targetPort}`;
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();

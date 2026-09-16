@@ -1,0 +1,72 @@
+# Render Blueprint Specification for Zerodha Clone Full-Stack Project
+# Deploy via Render Dashboard -> Blueprints -> Connect Repository
+version: "1"
+
+services:
+  # 1. Backend Web Service (Node.js / Express / Socket.io / MongoDB / Twelve Data)
+  - type: web
+    name: zerodha-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        value: mongodb+srv://yashhogade6_db_user:PkY99RcjFfgWtV6u@zeodhaclonecluster.aqzxaxc.mongodb.net/zerodha?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        value: zerodha_super_secure_jwt_secret_key_2026_98374218974
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: TWELVE_DATA_API_KEY
+        value: e6b42bda40574495b4d930ed890c2077
+      - key: CORS_ORIGIN
+        value: "*"
+
+  # 2. Zerodha Landing Static Site (React SPA)
+  - type: static
+    name: zerodha-frontend
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: zerodha-backend
+          property: host
+      - key: REACT_APP_KITE_URL
+        sync: false
+
+  # 3. Kite Trading Dashboard Static Site (React SPA)
+  - type: static
+    name: zerodha-kite-dashboard
+    plan: free
+    rootDir: dashboard
+    buildCommand: npm install && npm run build
+    staticPublishPath: build
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          type: web
+          name: zerodha-backend
+          property: host
+      - key: REACT_APP_ZERODHA_URL
+        sync: false

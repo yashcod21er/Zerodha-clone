@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 import { holdings as defaultHoldings } from "../data/data";
+import { API_BASE_URL } from "../config/api";
 
 const Holdings = () => {
     const [allHoldings, setAllHoldings] = useState([]);
 
     useEffect(() => {
         axios
-            .get("http://localhost:3002/allHoldings")
+            .get(`${API_BASE_URL}/allHoldings`)
             .then((res) => {
                 if (res.data && res.data.length > 0) {
                     setAllHoldings(res.data);

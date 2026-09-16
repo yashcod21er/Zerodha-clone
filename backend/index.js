@@ -25,12 +25,26 @@ app.use(helmet({
 }));
 
 // CORS with credentials support
-const allowedOrigins = ["http://localhost:3000", "http://localhost:3001"];
+const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    process.env.FRONTEND_URL,
+    process.env.KITE_URL,
+    process.env.DASHBOARD_URL,
+].filter(Boolean);
+
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin) || origin.startsWith("http://localhost:")) {
+        if (
+            !origin ||
+            allowedOrigins.includes(origin) ||
+            origin.startsWith("http://localhost:") ||
+            origin.startsWith("http://127.0.0.1:") ||
+            origin.endsWith(".onrender.com")
+        ) {
             callback(null, true);
         } else {
+            // In development or if not matched, permit origin
             callback(null, true);
         }
     },
@@ -39,6 +53,19 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(express.json());
+
+// Health check endpoint for Render monitoring
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+    });
+});
+
+app.get("/", (req, res) => {
+    res.status(200).send("Zerodha Clone Backend API is running successfully on Render.");
+});
 
 // Authentication routes
 app.use("/auth", authRoutes);

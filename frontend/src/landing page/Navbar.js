@@ -8,8 +8,11 @@ function Navbar() {
   const menuRef = useRef(null);
 
   // Dynamically determine the URL of Kite
-  // If frontend is running on 3001, Kite is on 3000. If frontend is on 3000, Kite is on 3001.
+  // In production (Render), reads REACT_APP_KITE_URL. Locally falls back to 3000/3001.
   const getKiteUrl = () => {
+    if (process.env.REACT_APP_KITE_URL) {
+      return process.env.REACT_APP_KITE_URL;
+    }
     if (typeof window !== "undefined") {
       const port = window.location.port;
       const kitePort = port === "3001" ? "3000" : "3001";

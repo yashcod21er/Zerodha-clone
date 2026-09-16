@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
+import { API_BASE_URL } from "../config/api";
 import "./BuyActionWindow.css";
 
 const BuyActionWindow = ({ uid, mode = "BUY", defaultPrice = null }) => {
@@ -28,7 +29,7 @@ const BuyActionWindow = ({ uid, mode = "BUY", defaultPrice = null }) => {
         setLoading(true);
 
         try {
-            const res = await axios.post("http://localhost:3002/newOrder", {
+            const res = await axios.post(`${API_BASE_URL}/newOrder`, {
                 name: uid,
                 qty: Number(stockQuantity),
                 price: Number(stockPrice),

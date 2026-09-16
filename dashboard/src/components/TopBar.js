@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Menu from "./Menu";
+import { API_BASE_URL } from "../config/api";
 
 const defaultIndices = {
     nifty50: {
@@ -29,7 +30,7 @@ const TopBar = ({ onLogout }) => {
         let isMounted = true;
         const fetchIndices = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/market/indices");
+                const res = await axios.get(`${API_BASE_URL}/market/indices`);
                 if (isMounted && res.data?.success && res.data?.indices) {
                     setIndices(res.data.indices);
                     setIsLive(true);
