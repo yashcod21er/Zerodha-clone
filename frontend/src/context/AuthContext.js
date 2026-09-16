@@ -3,7 +3,11 @@ import axios from "axios";
 
 const AuthContext = createContext(null);
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3002";
+const rawApiUrl = (process.env.REACT_APP_API_URL || "http://localhost:3002").trim();
+const formattedApiUrl = rawApiUrl.startsWith("http://") || rawApiUrl.startsWith("https://")
+    ? rawApiUrl
+    : `https://${rawApiUrl}`;
+const API_BASE_URL = formattedApiUrl.replace(/\/+$/, "");
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {

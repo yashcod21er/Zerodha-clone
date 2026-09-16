@@ -54,8 +54,12 @@ const KiteLogin = ({ onLoginSuccess }) => {
                 setError(res.data.message || "Invalid credentials.");
             }
         } catch (err) {
+            console.error("[Kite Login Error]", err, "Attempted Target:", `${API_BASE_URL}/auth/login`);
             const msg =
                 err.response?.data?.message ||
+                (err.message === "Network Error"
+                    ? `Network connection error. Unable to reach backend at ${API_BASE_URL}. Please verify backend is awake.`
+                    : err.message) ||
                 "Unable to connect to Zerodha Kite authentication server.";
             setError(msg);
         } finally {
