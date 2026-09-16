@@ -259,6 +259,7 @@ const WatchListItem = ({ stock, onToggleChart }) => {
             className={`watchlist-item-row ${stock.isDown ? "item-down" : "item-up"}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => setIsHovered((prev) => !prev)}
         >
             <div className="item-details">
                 <div className="symbol-meta-wrapper">

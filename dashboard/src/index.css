@@ -307,16 +307,26 @@ body {
    WATCHLIST (MARKETWATCH) SIDEBAR
    ========================================================================== */
 
-.watchlist-container {
+.watchlist-wrapper {
   width: 33%;
   min-width: 360px;
   max-width: 440px;
+  height: 100%;
+}
+
+.watchlist-container {
+  width: 100%;
   height: 100%;
   border-right: 1px solid #f1f1f1;
   display: flex;
   flex-direction: column;
   background: #ffffff;
   position: relative;
+}
+
+.kite-mobile-view-toggle,
+.kite-bottom-nav {
+  display: none !important;
 }
 
 .search-wrapper {
@@ -1238,4 +1248,295 @@ body {
   font-size: 13px;
   color: #888888;
   margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS (< 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Hide desktop-only elements */
+  .nav-links,
+  .nav-divider {
+    display: none !important;
+  }
+
+  /* Show mobile segmented switcher */
+  .kite-mobile-view-toggle {
+    display: flex !important;
+    background: #f4f5f7;
+    border-radius: 8px;
+    padding: 3px;
+    margin: 8px 12px 6px 12px;
+    gap: 4px;
+  }
+
+  .mobile-tab-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666666;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .mobile-tab-btn.active {
+    background: #ffffff;
+    color: #ff5722;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Authentic Kite Mobile Bottom Navigation */
+  .kite-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #ffffff;
+    border-top: 1px solid #eaeaea;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #888888;
+    flex: 1;
+    height: 100%;
+    transition: color 0.15s ease;
+    padding: 6px 0;
+    font-family: inherit;
+  }
+
+  .bottom-nav-item.active {
+    color: #ff5722;
+  }
+
+  .bottom-nav-icon {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  .bottom-nav-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+  }
+
+  /* TopBar on Mobile */
+  .topbar-container {
+    height: auto;
+    min-height: 48px;
+    flex-direction: column;
+    align-items: stretch;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .menu-container {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    order: 1;
+  }
+
+  .indices-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 32px;
+    border-right: none;
+    border-top: 1px solid #f2f2f2;
+    background: #fbfbfb;
+    padding: 0 12px;
+    order: 2;
+    justify-content: space-between;
+  }
+
+  .index-item {
+    gap: 4px;
+  }
+
+  .index-title {
+    font-size: 10px;
+  }
+
+  .index-points {
+    font-size: 11px;
+  }
+
+  .index-change {
+    font-size: 10px;
+  }
+
+  .index-divider {
+    height: 14px;
+  }
+
+  .live-feed-badge {
+    font-size: 9px;
+    padding: 1px 5px;
+  }
+
+  /* Dashboard View Switching on Mobile */
+  .dashboard-container {
+    flex-direction: column;
+    height: calc(100vh - 84px);
+    overflow: hidden;
+  }
+
+  /* On Home with Watchlist selected */
+  .dashboard-container.mobile-view-watchlist .watchlist-wrapper {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: calc(100vh - 144px);
+  }
+
+  .dashboard-container.mobile-view-watchlist .content {
+    display: none;
+  }
+
+  /* On Home with Overview selected */
+  .dashboard-container.mobile-view-dashboard .watchlist-wrapper {
+    display: none;
+  }
+
+  .dashboard-container.mobile-view-dashboard .content {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 144px);
+    padding: 14px 12px 76px 12px;
+  }
+
+  /* On subpages (Orders, Holdings, Positions, Funds, Apps) */
+  .dashboard-container.mobile-view-content .watchlist-wrapper {
+    display: none;
+  }
+
+  .dashboard-container.mobile-view-content .content {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 84px);
+    padding: 14px 12px 76px 12px;
+  }
+
+  .watchlist-container {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 100%;
+    border-right: none;
+  }
+
+  .watchlist-item-row {
+    padding: 0 12px;
+    height: 48px;
+  }
+
+  .watchlist-scrollable {
+    padding-bottom: 70px;
+  }
+
+  /* Content area cards & metrics on mobile */
+  .summary-page {
+    max-width: 100%;
+  }
+
+  .summary-header .greeting-text {
+    font-size: 20px;
+  }
+
+  .summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .card-divider {
+    width: 100%;
+    height: 1px;
+    margin: 4px 0;
+  }
+
+  .metric-primary {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .metric-large {
+    font-size: 28px;
+  }
+
+  .metric-secondary-list,
+  .metric-row {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .holdings-metrics-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .funds-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .funds-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .banner-actions {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+
+  .banner-actions button {
+    flex: 1;
+  }
+
+  /* Horizontal swipe for tables on mobile */
+  .kite-table-card {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 4px;
+  }
+
+  .kite-table {
+    min-width: 520px;
+  }
+
+  /* Modal responsive behavior */
+  .kite-buy-window {
+    width: calc(100vw - 20px) !important;
+    max-width: 440px !important;
+    margin: 10px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
 }
